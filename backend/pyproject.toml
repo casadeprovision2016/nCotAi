@@ -7,56 +7,59 @@ readme = "README.md"
 packages = [{include = "app"}]
 
 [tool.poetry.dependencies]
-python = "^3.11"
-fastapi = "^0.104.1"
-uvicorn = {extras = ["standard"], version = "^0.24.0"}
-sqlalchemy = "^2.0.23"
-alembic = "^1.12.1"
-psycopg2-binary = "^2.9.9"
-pymongo = "^4.6.0"
-redis = "^5.0.1"
-celery = "^5.3.4"
-python-jose = {extras = ["cryptography"], version = "^3.3.0"}
+python = ">=3.11,<3.14"
+fastapi = "^0.116.1"
+uvicorn = {extras = ["standard"], version = "^0.35.0"}
+sqlalchemy = "^2.0.41"
+alembic = "^1.16.4"
+psycopg2-binary = "^2.9.10"
+pymongo = "^4.13.2"
+redis = "^6.2.0"
+celery = "^5.5.3"
+python-jose = {extras = ["cryptography"], version = "^3.5.0"}
 passlib = {extras = ["bcrypt"], version = "^1.7.4"}
-python-multipart = "^0.0.6"
-email-validator = "^2.1.0"
-pydantic = {extras = ["email"], version = "^2.5.0"}
-pydantic-settings = "^2.1.0"
-python-dotenv = "^1.0.0"
-httpx = "^0.25.2"
-aiofiles = "^23.2.1"
-pillow = "^10.1.0"
-pytesseract = "^0.3.10"
-spacy = "^3.7.2"
-scikit-learn = "^1.3.2"
-pandas = "^2.1.4"
-numpy = "^1.25.2"
+python-multipart = "^0.0.20"
+email-validator = "^2.2.0"
+pydantic = {extras = ["email"], version = "^2.11.7"}
+pydantic-settings = "^2.10.1"
+python-dotenv = "^1.1.1"
+httpx = "^0.28.1"
+aiohttp = "^3.12.14"
+aiofiles = "^24.1.0"
+pillow = "^11.3.0"
+pytesseract = "^0.3.13"
+scikit-learn = "^1.7.0"
+pandas = "^2.3.1"
+numpy = "^2.3.1"
 pyotp = "^2.9.0"
-qrcode = {extras = ["pil"], version = "^7.4.2"}
-cryptography = "^41.0.7"
+qrcode = {extras = ["pil"], version = "^8.2"}
+cryptography = "^45.0.5"
 slowapi = "^0.1.9"
 user-agents = "^2.2.0"
+spacy = {version = "^3.8.7", python = ">=3.11,<3.14"}
+
 
 [tool.poetry.group.dev.dependencies]
-pytest = "^7.4.3"
-pytest-asyncio = "^0.21.1"
-pytest-cov = "^4.1.0"
-pytest-mock = "^3.12.0"
-pytest-xdist = "^3.5.0"
-httpx = "^0.25.2"
-factory-boy = "^3.3.0"
-faker = "^20.1.0"
-responses = "^0.24.1"
-freezegun = "^1.3.1"
-black = "^23.11.0"
-isort = "^5.12.0"
-flake8 = "^6.1.0"
-mypy = "^1.7.1"
-pre-commit = "^3.6.0"
+pytest = "^8.4.1"
+pytest-asyncio = "^1.0.0"
+pytest-cov = "^6.2.1"
+pytest-mock = "^3.14.1"
+pytest-xdist = "^3.8.0"
+httpx = "^0.28.1"
+factory-boy = "^3.3.3"
+faker = "^37.4.0"
+responses = "^0.25.7"
+freezegun = "^1.5.3"
+black = "^25.1.0"
+isort = "^6.0.1"
+flake8 = "^7.3.0"
+mypy = "^1.16.1"
+pre-commit = "^4.2.0"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
 
 [tool.black]
 line-length = 88
