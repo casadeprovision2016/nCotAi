@@ -43,7 +43,11 @@
       "Bash(docker volume:*)",
       "Bash(docker run:*)",
       "Bash(docker:*)",
-      "Bash(sudo ls:*)"
+      "Bash(sudo ls:*)",
+      "Bash(npx tailwindcss init:*)",
+      "Bash(./node_modules/.bin/tailwind:*)",
+      "Bash(timeout 10 npm run dev -- --host 0.0.0.0 --port 3000)",
+      "Bash(pkill -f \"vite.*3001\")"
     ],
     "deny": []
   }

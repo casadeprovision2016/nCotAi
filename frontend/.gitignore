@@ -1,0 +1,51 @@
+# Node modules
+node_modules/
+
+# Build output
+dist/
+dist-ssr/
+storybook-static/
+
+# Test coverage
+coverage/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Log files
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# IDE files
+.vscode/
+!.vscode/extensions.json
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Cypress
+cypress/videos/
+cypress/screenshots/
+
+# Husky
+.husky/_/
+
+# Misc
+*.swp
+*.swo
+
+# Editor project files
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

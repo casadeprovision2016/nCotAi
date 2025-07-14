@@ -125,6 +125,41 @@ class Settings(BaseSettings):
     GOVBR_CLIENT_SECRET: Optional[str] = None
     GOVBR_REDIRECT_URI: Optional[str] = None
 
+    # Google Drive Integration
+    GOOGLE_DRIVE_CLIENT_ID: Optional[str] = None
+    GOOGLE_DRIVE_CLIENT_SECRET: Optional[str] = None
+    GOOGLE_DRIVE_REDIRECT_URI: Optional[str] = None
+    GOOGLE_DRIVE_PROJECT_ID: Optional[str] = None
+    GOOGLE_DRIVE_SCOPES: List[str] = [
+        "https://www.googleapis.com/auth/drive",
+        "https://www.googleapis.com/auth/drive.file",
+    ]
+
+    # Cloud Storage Configuration
+    CLOUD_STORAGE_ENABLED: bool = False
+    CLOUD_STORAGE_DEFAULT_PROVIDER: str = "google_drive"
+    CLOUD_STORAGE_MAX_FILE_SIZE: int = 100 * 1024 * 1024  # 100MB
+    CLOUD_STORAGE_ALLOWED_TYPES: List[str] = [
+        "application/pdf",
+        "image/jpeg",
+        "image/png",
+        "image/gif",
+        "text/plain",
+        "application/msword",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "application/vnd.ms-excel",
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    ]
+
+    @property
+    def GOOGLE_DRIVE_CONFIGURED(self) -> bool:
+        """Check if Google Drive is properly configured."""
+        return bool(
+            self.GOOGLE_DRIVE_CLIENT_ID
+            and self.GOOGLE_DRIVE_CLIENT_SECRET
+            and self.GOOGLE_DRIVE_REDIRECT_URI
+        )
+
     # Rate limiting
     RATE_LIMIT_PER_MINUTE: int = 60
     RATE_LIMIT_BURST: int = 10

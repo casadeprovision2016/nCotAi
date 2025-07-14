@@ -10,7 +10,13 @@ COTAI (Sistema de Automação para Cotações e Editais) is a full-stack SaaS pl
 
 ### Technology Stack
 - **Backend**: Python (FastAPI) - Core API and business logic
-- **Frontend**: React - User interface components
+- **Frontend**: React 18 + TypeScript - Modern SPA with type safety
+  - **UI Framework**: Tailwind CSS + Shadcn/UI components
+  - **State Management**: TanStack Query (React Query) for server state
+  - **Forms**: React Hook Form + Zod validation
+  - **Routing**: React Router v6 with protected routes
+  - **Icons**: Lucide React icon library
+  - **Testing**: Vitest + React Testing Library + Cypress E2E
 - **Specialized Services**: Go - High-performance PDF processing
 - **Databases**: 
   - PostgreSQL for relational/structured data
@@ -175,31 +181,101 @@ pytest tests/test_specific.py -v
 pytest -k "test_function_name"
 ```
 
-### Frontend Development (React TypeScript)
+### Frontend Development (React 18 + TypeScript)
 
 ```bash
 cd frontend
 
-# Install dependencies
+# Install dependencies (use npm consistently)
 npm install
 
+# Add new dependencies (always use npm commands)
+npm install <package-name>
+npm install -D <dev-package-name>
+
 # Start development server
-npm start
+npm run dev
 
 # Build for production
 npm run build
 
+# Preview production build
+npm run preview
+
 # Run tests
-npm test
-npm test -- --coverage
+npm run test
+npm run test:coverage
+npm run test:watch
+
+# E2E tests
+npm run test:e2e
+npm run test:e2e:ui
 
 # Linting and formatting
 npm run lint
 npm run lint:fix
 npm run format
+npm run format:check
 
 # Type checking
-npx tsc --noEmit
+npm run type-check
+npm run type-check:watch
+
+# Development tools
+npm run storybook        # Component documentation
+npm run dev:https        # HTTPS development server
+npm run analyze         # Bundle analyzer
+```
+
+### Package Management Standards
+
+**IMPORTANT: Always use npm commands for dependency management. Never edit package.json directly.**
+
+```bash
+# Installing dependencies
+npm install                    # Install all dependencies
+npm install <package>         # Add production dependency
+npm install -D <package>      # Add development dependency
+npm install -g <package>      # Global installation (rare)
+
+# Updating dependencies
+npm update                    # Update all dependencies
+npm update <package>          # Update specific package
+npm outdated                  # Check for outdated packages
+
+# Removing dependencies
+npm uninstall <package>       # Remove dependency
+npm uninstall -D <package>    # Remove dev dependency
+
+# Dependency analysis
+npm list                      # Show dependency tree
+npm audit                     # Security audit
+npm audit fix                 # Fix security issues
+
+# Cache management
+npm cache clean --force       # Clear npm cache
+```
+
+### Frontend Project Structure
+
+```
+frontend/
+├── public/                   # Static assets
+├── src/
+│   ├── components/          # Reusable UI components
+│   │   ├── ui/             # Shadcn/UI base components
+│   │   ├── forms/          # Form components
+│   │   ├── layout/         # Layout components
+│   │   └── features/       # Feature-specific components
+│   ├── pages/              # Page components
+│   ├── hooks/              # Custom React hooks
+│   ├── lib/                # Utilities and configurations
+│   ├── types/              # TypeScript definitions
+│   ├── styles/             # Global styles
+│   └── __tests__/          # Test files
+├── cypress/                # E2E tests
+├── .storybook/            # Storybook configuration
+└── dist/                  # Build output
 ```
 
 ### Go PDF Processor Service

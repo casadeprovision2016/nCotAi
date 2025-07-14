@@ -30,6 +30,11 @@ COPY . /app/
 # Create uploads directory
 RUN mkdir -p /app/uploads
 
+# Create a non-root user and set permissions
+RUN addgroup --system app && adduser --system --group app
+RUN chown -R app:app /app
+USER app
+
 # Expose port
 EXPOSE 8000
 

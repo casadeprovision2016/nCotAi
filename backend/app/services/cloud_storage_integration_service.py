@@ -8,11 +8,18 @@ from datetime import datetime
 from typing import Any, Dict, List, Optional
 
 from sqlalchemy.orm import Session
-# TODO: Implement cloud storage modules
-# from app.services.cloud_storage.google_drive_service import GoogleDriveService
-# from app.services.cloud_storage.dropbox_service import DropboxService
-# from app.services.cloud_storage.cloud_storage_manager import CloudStorageManager
-# from app.services.cloud_storage.storage_sync_service import StorageSyncService
+from app.core.config import settings
+
+# Import cloud storage services
+import sys
+import os
+sys.path.append(os.path.join(os.path.dirname(__file__), '../../src/services/cloud-storage'))
+
+try:
+    from google_drive_service import GoogleDriveService
+except ImportError:
+    logger.warning("GoogleDriveService not available")
+    GoogleDriveService = None
 
 logger = logging.getLogger(__name__)
 
@@ -22,18 +29,18 @@ class CloudStorageIntegrationService:
 
     def __init__(self, db: Session):
         self.db = db
-        # TODO: Initialize services when modules are implemented
-        # self.google_drive_service = GoogleDriveService()
-        # self.dropbox_service = DropboxService()
-        # self.storage_manager = CloudStorageManager()
-        # self.sync_service = StorageSyncService()
-
-        # Service registry (placeholder)
+        
+        # Initialize Google Drive service if available and configured
+        self.google_drive_service = None
+        if GoogleDriveService and settings.GOOGLE_DRIVE_CONFIGURED:
+            self.google_drive_service = GoogleDriveService()
+        
+        # Service registry
         self.services = {
-            "google_drive": None,
-            "dropbox": None,
-            "manager": None,
-            "sync": None,
+            "google_drive": self.google_drive_service,
+            "dropbox": None,  # TODO: Implement Dropbox service
+            "manager": None,  # TODO: Implement storage manager
+            "sync": None,     # TODO: Implement sync service
         }
 
         # Integration status
@@ -52,20 +59,19 @@ class CloudStorageIntegrationService:
             results = {}
 
             # Initialize Google Drive service
-            gdrive_result = await self.google_drive_service.initialize()
-            results["google_drive"] = gdrive_result
+            if self.google_drive_service:
+                gdrive_result = await self.google_drive_service.initialize()
+                results["google_drive"] = gdrive_result
+            else:
+                results["google_drive"] = {
+                    "success": False,
+                    "error": "Google Drive service not configured or not available"
+                }
 
-            # Initialize Dropbox service
-            dropbox_result = await self.dropbox_service.initialize()
-            results["dropbox"] = dropbox_result
-
-            # Initialize storage manager
-            manager_result = await self.storage_manager.initialize()
-            results["manager"] = manager_result
-
-            # Initialize sync service
-            sync_result = await self.sync_service.initialize()
-            results["sync"] = sync_result
+            # TODO: Initialize other services when implemented
+            results["dropbox"] = {"success": False, "error": "Service not implemented"}
+            results["manager"] = {"success": False, "error": "Service not implemented"}
+            results["sync"] = {"success": False, "error": "Service not implemented"}
 
             # Update service health status
             for service_name, result in results.items():
@@ -75,7 +81,7 @@ class CloudStorageIntegrationService:
                     "details": result,
                 }
 
-            logger.info("Cloud storage integration services initialized successfully")
+            logger.info("Cloud storage integration services initialized")
             return {
                 "success": True,
                 "message": "Cloud storage integration services initialized",
@@ -99,23 +105,36 @@ class CloudStorageIntegrationService:
         """Upload file to cloud storage provider."""
         try:
             if provider == "google_drive":
-                result = await self.google_drive_service.upload_file(
-                    file_content=file_content,
-                    filename=filename,
-                    folder_path=folder_path,
-                    description=description,
-                )
+                if not self.google_drive_service:
+                    return {"success": False, "error": "Google Drive service not available"}
+                
+                # Save file temporarily for upload
+                import tempfile
+                with tempfile.NamedTemporaryFile(delete=False, suffix=f"_{filename}") as temp_file:
+                    temp_file.write(file_content)
+                    temp_file_path = temp_file.name
+                
+                try:
+                    result = await self.google_drive_service.upload_file(
+                        file_path=temp_file_path,
+                        file_name=filename,
+                        parent_folder_id=folder_path,
+                        description=description,
+                    )
+                finally:
+                    # Clean up temporary file
+                    os.unlink(temp_file_path)
+                    
             elif provider == "dropbox":
-                result = await self.dropbox_service.upload_file(
-                    file_content=file_content,
-                    filename=filename,
-                    folder_path=folder_path,
-                )
+                return {"success": False, "error": "Dropbox service not implemented"}
             else:
                 raise ValueError(f"Unsupported provider: {provider}")
 
             # Log upload activity
-            logger.info(f"File uploaded to {provider}: {filename}")
+            if result.get("success"):
+                logger.info(f"File uploaded to {provider}: {filename}")
+            else:
+                logger.error(f"Failed to upload file to {provider}: {result.get('error')}")
             
             return result
 
